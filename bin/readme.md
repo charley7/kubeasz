@@ -1,3 +1,5 @@
-# 项目二进制目录
+# Binaries for k8s clusters
 
-集群用到的所有二进制文件已打包好供下载 https://pan.baidu.com/s/1c4RFaA
+For kubeasz 2x and above, binaries are downloaded and managed by 'tools/easzup'.
+
+Alternatively, binaries can be downloaded from the official github repos by referring to the script 'down/download.sh'.

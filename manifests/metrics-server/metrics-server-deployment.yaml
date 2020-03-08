@@ -5,7 +5,7 @@ metadata:
   name: metrics-server
   namespace: kube-system
 ---
-apiVersion: extensions/v1beta1
+apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: metrics-server
@@ -23,11 +23,19 @@ spec:
         k8s-app: metrics-server
     spec:
       serviceAccountName: metrics-server
+      volumes:
+      # mount in tmp so we can safely use from-scratch images and/or read-only containers
+      - name: tmp-dir
+        emptyDir: {}
       containers:
       - name: metrics-server
-        #image: gcr.io/google_containers/metrics-server-amd64:v0.2.1
-        image: mirrorgooglecontainers/metrics-server-amd64:v0.2.1
+        #image: k8s.gcr.io/metrics-server-amd64:v0.3.6
+        image: mirrorgooglecontainers/metrics-server-amd64:v0.3.6
         imagePullPolicy: IfNotPresent 
         command:
         - /metrics-server
-        - --source=kubernetes.summary_api:''
+        - --metric-resolution=30s
+        - --kubelet-insecure-tls
+        volumeMounts:
+        - name: tmp-dir
+          mountPath: /tmp
